@@ -14,6 +14,7 @@ class TrafficSim(object):
         self.pos = POS_START
         self.vel = VEL_START
         self.time = 0
+        self.numSteps = 0
 
     def truncate(self, acc):
         return max(min(acc, MAX_ACC), MIN_ACC)
@@ -23,10 +24,13 @@ class TrafficSim(object):
         self.pos += self.vel * DT
 
     def timestep(self):
+        self.numSteps += 1
         self.time += DT
-        acc = self.driver.act(self.pos, self.vel, self.trafficLight.isGreen(self.time))
+        acc = self.driver.act(self.pos, self.vel, self.time, self.trafficLight.isGreen(self.time))
         acc = self.truncate(acc)
         self.integrate(acc)
+        if self.numSteps % 100 == 0:
+            print(self.vel, acc)
 
     def run(self):
         """Run the simulation until either

@@ -1,6 +1,9 @@
 from trafficSim import TrafficSim
 from trafficLight import FixedTrafficLight
-from driver import StupidDriver
+from controller import ConstantSpeedController, StupidController
 
-s = TrafficSim(StupidDriver(), FixedTrafficLight(5))
+driver = ConstantSpeedController()
+driver.train()
+s = TrafficSim(driver, FixedTrafficLight(5))
 s.run()
+

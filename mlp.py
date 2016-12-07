@@ -1,7 +1,5 @@
 import tensorflow as tf
 import numpy as np
-import input_data
-import trainingData
 from constants import STDDEV, LEARNING_PARAMETER
 
 class MLP(object):

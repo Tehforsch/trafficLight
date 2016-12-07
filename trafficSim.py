@@ -1,7 +1,7 @@
 from constants import POS_START, VEL_START, MAX_ACC, MIN_ACC, DT
 from collections import namedtuple
 
-DriverState = namedtuple('DriveState', ['time', 'pos', 'vel'])
+DriverState = namedtuple('DriveState', ['time', 'pos', 'vel', 'acc'])
 
 
 class TrafficSim(object):
@@ -52,7 +52,8 @@ class TrafficSim(object):
             print("{:.2} {:.2} {:.2}".format(self.pos, self.vel, acc))
 
         if self.logging:
-            self.log.append(DriverState(time=self.time, pos=self.pos, vel=self.vel))
+            self.log.append(DriverState(time=self.time, pos=self.pos,
+                                        vel=self.vel, acc=acc))
 
     def run(self):
         """Run the simulation until the traffic light turns green"""

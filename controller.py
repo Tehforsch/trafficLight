@@ -2,17 +2,21 @@ import numpy as np
 import tensorflow as tf
 import random
 from mlp import MLP
-from constants import MAX_ACC, MIN_ACC, NUM_OBSERVATION_VARIABLES, VEL_START, POS_START, MAX_ALLOWED_VEL
+from constants import MAX_ACC, MIN_ACC, NUM_OBSERVATION_VARIABLES, VEL_START, \
+    POS_START, MAX_ALLOWED_VEL
+
 
 class Controller(object):
     def act(self, pos, vel, time):
         pass
 
+
 class LinearController(Controller):
     def act(self, pos, vel, time):
-        """Brake with a small, constant decceleration to reach 
+        """Brake with a small, constant decceleration to reach
         zero velocity at the traffic light."""
         return 0.5 * VEL_START ** 2 / POS_START
+
 
 class LateBrakeController(Controller):
     def act(self, pos, vel, time):
@@ -22,6 +26,20 @@ class LateBrakeController(Controller):
         if brakeDistance >= abs(pos):
             return MIN_ACC
         return 0.0
+
+
+class CheatController(Controller):
+    def act(self, pos, vel, time):
+        """A perfect but unfair driver that knows the specific time when the
+        traffic light switches to green."""
+        startTime = 5 - MAX_ALLOWED_VEL / MAX_ACC
+
+        if time < startTime:
+            brakeAcc = 0.5 * VEL_START**2 / (MAX_ALLOWED_VEL**2 / (2.0 * MAX_ACC) + POS_START)
+            return brakeAcc
+        else:
+            return MAX_ACC
+
 
 class ConstantSpeedController(Controller):
     def __init__(self):

@@ -28,19 +28,20 @@ class TrafficSim(object):
             self.log = []
 
     def truncate(self, acc):
-        """Ensure that the acceleration is in the interval [MIN_ACC, MAX_ACC]."""
-
-        return max(min(acc, MAX_ACC), MIN_ACC)
+        """Ensure that the acceleration is in the interval [MIN_ACC, MAX_ACC].
+        Reduce accelerations that would result in a negative velocity."""
+        acc = max(min(acc, MAX_ACC), MIN_ACC)
+        if acc * DT + self.vel < 0:
+            acc = -self.vel / DT
+        return acc
 
     def integrate(self, acc):
         """Update the state by integrating over a short time interval."""
-
         self.vel += acc * DT
         self.pos += self.vel * DT
 
     def timestep(self):
         """Perform a single simulation step."""
-
         self.numSteps += 1
         self.time += DT
 

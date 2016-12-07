@@ -2,15 +2,28 @@ import numpy as np
 import tensorflow as tf
 import random
 from mlp import MLP
-from constants import MAX_ACC, MIN_ACC, NUM_OBSERVATION_VARIABLES
+from constants import MAX_ACC, MIN_ACC, NUM_OBSERVATION_VARIABLES, VEL_START, POS_START, MAX_ALLOWED_VEL
 
-class StupidController(object):
-    def act(self, pos, vel, time, green):
-        if not green:
-            return 0
-        return MAX_ACC # always accelerate
+class Controller(object):
+    def act(self, pos, vel, time):
+        pass
 
-class ConstantSpeedController(object):
+class LinearController(Controller):
+    def act(self, pos, vel, time):
+        """Brake with a small, constant decceleration to reach 
+        zero velocity at the traffic light."""
+        return 0.5 * VEL_START ** 2 / POS_START
+
+class LateBrakeController(Controller):
+    def act(self, pos, vel, time):
+        """Assumes maximal velocity at the beginning and brakes
+        only if it needs to in order to reach stop before the traffic light."""
+        brakeDistance = MAX_ALLOWED_VEL ** 2 / (2 * abs(MIN_ACC))
+        if brakeDistance >= abs(pos):
+            return MIN_ACC
+        return 0.0
+
+class ConstantSpeedController(Controller):
     def __init__(self):
         self.observation = tf.placeholder("float", [None, NUM_OBSERVATION_VARIABLES])
         cost = lambda trainingData, output : tf.reduce_mean(tf.square(trainingData-output))
@@ -25,7 +38,7 @@ class ConstantSpeedController(object):
         for i in range(numSteps):
             self.nn.train(self.getTrainingData(batchSize))
 
-    def act(self, pos, vel, time, green):
+    def act(self, pos, vel, time):
         # inp = np.array([pos, vel, time, green])
         inp = np.array([vel])
         inp = inp[np.newaxis,...]

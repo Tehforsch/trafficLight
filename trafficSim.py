@@ -1,46 +1,61 @@
-from constants import POS_START, VEL_START, MAX_ACC, MIN_ACC, DT, MAX_TIME, MAX_ALLOWED_VEL
+from constants import POS_START, VEL_START, MAX_ACC, MIN_ACC, DT
+from collections import namedtuple
+
+DriverState = namedtuple('DriveState', ['time', 'pos', 'vel'])
+
 
 class TrafficSim(object):
-    """Handles a simulation of 
-    1. A car at position pos moving towards (hopefully) a traffic-light
-    at speed vel.
+    """
+    Handles a simulation of
+    1. A car at position pos moving towards a traffic-light at speed vel.
     2. A traffic light at position 0 that will be red initially and turn green
-    at some point in time.
-    3. A driver who is given the position and velocity of the car as well as the
-    state of the traffic light and decides on the acceleration of the car"""
-    def __init__(self, driver, trafficLight):
+       at some point in time.
+    3. A driver who is given the position and velocity of the car as well as
+       the state of the traffic light and decides on the acceleration of the
+       car.
+    """
+
+    def __init__(self, driver, trafficLight, logging=False):
         self.driver = driver
         self.trafficLight = trafficLight
         self.pos = POS_START
         self.vel = VEL_START
         self.time = 0
         self.numSteps = 0
+        self.logging = logging
+
+        if self.logging:
+            self.log = []
 
     def truncate(self, acc):
+        """Ensure that the acceleration is in the interval [MIN_ACC, MAX_ACC]."""
+
         return max(min(acc, MAX_ACC), MIN_ACC)
 
     def integrate(self, acc):
+        """Update the state by integrating over a short time interval."""
+
         self.vel += acc * DT
         self.pos += self.vel * DT
 
     def timestep(self):
+        """Perform a single simulation step."""
+
         self.numSteps += 1
         self.time += DT
+
         acc = self.driver.act(self.pos, self.vel, self.time, self.trafficLight.isGreen(self.time))
         acc = self.truncate(acc)
         self.integrate(acc)
+
         if self.numSteps % 100 == 0:
             print(self.vel, acc)
 
+        if self.logging:
+            self.log.append(DriverState(time=self.time, pos=self.pos, vel=self.vel))
+
     def run(self):
-        """Run the simulation until either
-        1. The car has reached the maximum allowed velocity
-        somewhere behind the traffic light
-        2. The simulation has run for too long.
-        """
-        while True:
+        """Run the simulation until the traffic light switches to green."""
+
+        while not self.trafficLight.isGreen(self.time):
             self.timestep()
-            if self.time > MAX_TIME:
-                break
-            if self.pos > 0 and self.vel >= MAX_ALLOWED_VEL:
-                break

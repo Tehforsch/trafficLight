@@ -18,6 +18,32 @@ class LinearController(Controller):
         return 0.5 * VEL_START ** 2 / POS_START
 
 
+class PowerLawController(Controller):
+    def __init__(self, alpha):
+        Controller.__init__(self)
+
+        # exponent
+        self.alpha = alpha
+
+        # braking time
+        self.tb = (alpha + 1) * abs(POS_START) / MAX_ALLOWED_VEL
+
+    def act(self, pos, vel, time):
+        """Brake such that the velocity follows a power law
+
+            vmax * (1 - t/tb)**alpha
+
+        where tb is the braking time. For alpha=1, this is equal to the
+        `LinearController`.
+        """
+        if time >= self.tb:
+            return MIN_ACC  # step on the brake pedal
+
+        a = self.alpha
+        tb = self.tb
+        return - a * MAX_ALLOWED_VEL / tb * (1.0 - time / tb)**(a - 1.0)
+
+
 class LateBrakeController(Controller):
     def act(self, pos, vel, time):
         """Assumes maximal velocity at the beginning and brakes

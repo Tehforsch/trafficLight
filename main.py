@@ -22,4 +22,4 @@ def printTotalScores(sims):
         print(name, total)
 
 printTotalScores(sims)
-# showTrajectory([sim.log for sim in sims])
+showTrajectory([sim.log for sim in sims])

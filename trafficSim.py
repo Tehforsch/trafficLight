@@ -1,4 +1,4 @@
-from constants import POS_START, VEL_START, MAX_ACC, MIN_ACC, DT
+from constants import START_POS, START_VEL, MAX_ACC, MIN_ACC, DT
 from collections import namedtuple
 
 DriverState = namedtuple('DriveState', ['time', 'pos', 'vel', 'acc'])
@@ -18,8 +18,8 @@ class TrafficSim(object):
     def __init__(self, driver, maxTime, logging=False):
         self.driver = driver
         self.maxTime = maxTime
-        self.pos = POS_START
-        self.vel = VEL_START
+        self.pos = START_POS
+        self.vel = START_VEL
         self.time = 0
         self.numSteps = 0
         self.logging = logging

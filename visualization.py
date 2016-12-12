@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import evaluation
 
-from constants import POS_START, MIN_ACC, MAX_ACC, MAX_ALLOWED_VEL
+from constants import START_POS, MIN_ACC, MAX_ACC, MAX_VEL
 
 
 def showTrajectory(logs):
@@ -22,10 +22,10 @@ def showTrajectory(logs):
     for p, t in zip(positions, times):
         plt.plot(p, t, linewidth=2)
     plt.ylabel("time")
-    plt.xlim(POS_START * 1.1, 0.1 * abs(POS_START))
+    plt.xlim(START_POS * 1.1, 0.1 * abs(START_POS))
     plt.ylim(0, maxTime)
     plt.axvline(x=0, ymin=0, ymax=1, color='k')
-    plt.axvline(x=POS_START, ymin=0, ymax=1, color='k')
+    plt.axvline(x=START_POS, ymin=0, ymax=1, color='k')
 
     plt.subplot(4, 1, 2)
 
@@ -33,10 +33,10 @@ def showTrajectory(logs):
     for v, t in zip(velocities, times):
         plt.plot(v, t, linewidth=2)
     plt.ylabel("time")
-    plt.xlim(-MAX_ALLOWED_VEL * 0.1, MAX_ALLOWED_VEL * 1.1)
+    plt.xlim(-MAX_VEL * 0.1, MAX_VEL * 1.1)
     plt.ylim(0, maxTime)
     plt.axvline(x=0, ymin=0, ymax=1, color='k')
-    plt.axvline(x=MAX_ALLOWED_VEL, ymin=0, ymax=1, color='k')
+    plt.axvline(x=MAX_VEL, ymin=0, ymax=1, color='k')
 
     plt.subplot(4, 1, 3)
 

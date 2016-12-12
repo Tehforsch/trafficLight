@@ -1,16 +1,25 @@
 from trafficSim import TrafficSim
-from trafficLight import FixedTrafficLight
+from trafficLight import TrafficLight, UniformTrafficLight
 from controller import LinearController, PowerLawController, \
     LateBrakeController, CheatController
 from visualization import showTrajectory
+import evaluation
 
 drivers = [LinearController(), LateBrakeController(),
            PowerLawController(0.5), PowerLawController(3.0),
            CheatController()]
-trafficLight = FixedTrafficLight(5)
+trafficLight = UniformTrafficLight(5)
 
-sims = [TrafficSim(driver, trafficLight, logging=True) for driver in drivers]
+sims = [TrafficSim(driver, trafficLight.maxTime, logging=True) for driver in drivers]
 for sim in sims:
     sim.run()
 
-showTrajectory([sim.log for sim in sims])
+def printTotalScores(sims):
+    print("Total scores:")
+    for sim in sims:
+        name = type(sim.driver).__name__
+        total = evaluation.totalPerformance(sim, trafficLight)
+        print(name, total)
+
+printTotalScores(sims)
+# showTrajectory([sim.log for sim in sims])

@@ -15,9 +15,9 @@ class TrafficSim(object):
        car.
     """
 
-    def __init__(self, driver, trafficLight, logging=False):
+    def __init__(self, driver, maxTime, logging=False):
         self.driver = driver
-        self.trafficLightTime = trafficLight.time
+        self.maxTime = maxTime
         self.pos = POS_START
         self.vel = VEL_START
         self.time = 0
@@ -48,8 +48,8 @@ class TrafficSim(object):
         acc = self.truncate(acc)
         self.integrate(acc)
 
-        if self.numSteps % 100 == 0:
-            print("{:.2} {:.2} {:.2}".format(self.pos, self.vel, acc))
+        # if self.numSteps % 100 == 0:
+            # print("{:.2} {:.2} {:.2}".format(self.pos, self.vel, acc))
 
         if self.logging:
             self.log.append(DriverState(time=self.time, pos=self.pos,
@@ -57,5 +57,5 @@ class TrafficSim(object):
 
     def run(self):
         """Run the simulation until the traffic light turns green"""
-        while self.time < self.trafficLightTime:
+        while self.time < self.maxTime:
             self.timestep()

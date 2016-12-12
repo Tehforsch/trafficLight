@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import evaluation
 
 from constants import POS_START, MIN_ACC, MAX_ACC, MAX_ALLOWED_VEL
 
@@ -8,12 +9,12 @@ def showTrajectory(logs):
     positions = [[s.pos for s in log] for log in logs]
     velocities = [[s.vel for s in log] for log in logs]
     accelerations = [[s.acc for s in log] for log in logs]
-    performances = [[s.pos - 0.5 * (MAX_ALLOWED_VEL - s.vel)**2 / MAX_ACC for s in log] for log in logs]
+    performances = [evaluation.performance(log) for log in logs]
 
     maxTime = max(max(t) for t in times)
     deltaAcc = MAX_ACC - MIN_ACC
-    minPerformance = POS_START - 0.5 * MAX_ALLOWED_VEL**2 / MAX_ACC
-    maxPerformance = 0
+    minPerformance = evaluation.minPerformance()
+    maxPerformance = evaluation.maxPerformance()
 
     plt.subplot(4, 1, 1)
 

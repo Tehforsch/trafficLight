@@ -5,8 +5,10 @@ from controller import LinearController, PowerLawController, \
 from visualization import showTrajectory
 import evaluation
 
-drivers = [LinearController(), LateBrakeController(),
-           PowerLawController(0.5), PowerLawController(3.0),
+drivers = [LinearController(), 
+           LateBrakeController(),
+           PowerLawController(0.5), 
+           PowerLawController(3.0), 
            CheatController()]
 trafficLight = UniformTrafficLight(5)
 
@@ -17,9 +19,9 @@ for sim in sims:
 def printTotalScores(sims):
     print("Total scores:")
     for sim in sims:
-        name = type(sim.driver).__name__
+        name = str(sim.driver)
         total = evaluation.totalPerformance(sim, trafficLight)
-        print(name, total)
+        print("{}: {}".format(name, total))
 
 printTotalScores(sims)
 showTrajectory([sim.log for sim in sims])

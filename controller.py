@@ -10,6 +10,8 @@ class Controller(object):
     def act(self, pos, vel, time):
         pass
 
+    def __str__(self):
+        return type(self).__name__
 
 class LinearController(Controller):
     def act(self, pos, vel, time):
@@ -43,6 +45,8 @@ class PowerLawController(Controller):
         tb = self.tb
         return - a * MAX_VEL / tb * (1.0 - time / tb)**(a - 1.0)
 
+    def __str__(self):
+        return "PowerLawController alpha = {}".format(self.alpha)
 
 class LateBrakeController(Controller):
     def act(self, pos, vel, time):

@@ -7,8 +7,12 @@ MAX_VEL = 1.0
 START_POS = -1.0
 START_VEL = MAX_VEL
 
+# Traffic light parameters
+MAX_TIME = 5
+
 # Simulation parameters
-DT = 0.001
+DT = 0.1
+NUM_STEPS = int(MAX_TIME / DT)
 
 # NN parameters
 NUM_OBSERVATION_VARIABLES = 1

@@ -1,4 +1,4 @@
-from constants import START_POS, START_VEL, MAX_ACC, MIN_ACC, DT
+from constants import START_POS, START_VEL, MAX_ACC, MIN_ACC, DT, NUM_STEPS
 from collections import namedtuple
 
 DriverState = namedtuple('DriveState', ['time', 'pos', 'vel', 'acc'])
@@ -57,5 +57,5 @@ class TrafficSim(object):
 
     def run(self):
         """Run the simulation until the traffic light turns green"""
-        while self.time < self.maxTime:
+        while self.numSteps < NUM_STEPS:
             self.timestep()

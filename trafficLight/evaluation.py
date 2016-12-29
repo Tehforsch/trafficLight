@@ -1,4 +1,4 @@
-from constants import MAX_VEL, MAX_ACC, START_POS, \
+from .constants import MAX_VEL, MAX_ACC, START_POS, \
     RUNNING_RED_LIGHT_PUNISHMENT, RUNNING_RED_LIGHT_EPSILON
 
 

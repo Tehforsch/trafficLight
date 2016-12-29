@@ -1,4 +1,4 @@
-from constants import START_POS, START_VEL, MAX_ACC, MIN_ACC, DT, NUM_STEPS
+from .constants import START_POS, START_VEL, MAX_ACC, MIN_ACC, DT, NUM_STEPS
 from collections import namedtuple
 
 DriverState = namedtuple('DriveState', ['time', 'pos', 'vel', 'acc'])

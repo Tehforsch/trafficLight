@@ -1,7 +1,7 @@
-import math
 import numpy as np
-import constants
-import random
+
+from .constants import DT
+
 
 class TrafficLight(object):
     def __init__(self, maxTime):
@@ -9,6 +9,7 @@ class TrafficLight(object):
 
     def score(self, performances):
         return performances[-1]
+
 
 class ProbabilityDistributionTrafficLight(TrafficLight):
     """
@@ -18,23 +19,26 @@ class ProbabilityDistributionTrafficLight(TrafficLight):
     """
     def __init__(self, distribution):
         self.distribution = distribution
-        maxTime = len(self.distribution) * constants.DT
+        maxTime = len(self.distribution) * DT
         super().__init__(maxTime)
 
     def score(self, performances):
         return self.distribution.expectedValue(performances)
 
+
 class UniformTrafficLight(ProbabilityDistributionTrafficLight):
     """
-    Represents a traffic light with a uniform probability 
+    Represents a traffic light with a uniform probability
     distribution with a cutoff after some time.
     """
     def __init__(self, maxTime):
-        super().__init__(UniformDistribution(maxTime, constants.DT))
+        super().__init__(UniformDistribution(maxTime, DT))
+
 
 def isclose(x1, x2):
     epsilon = 1e-10
     return abs(x1 - x2) < epsilon
+
 
 class Distribution(object):
     def __init__(self, density):
@@ -50,6 +54,7 @@ class Distribution(object):
 
     def __len__(self):
         return len(self.density)
+
 
 class UniformDistribution(Distribution):
     """

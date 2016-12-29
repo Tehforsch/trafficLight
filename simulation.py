@@ -4,7 +4,7 @@ from collections import namedtuple
 DriverState = namedtuple('DriveState', ['time', 'pos', 'vel', 'acc'])
 
 
-class TrafficSim(object):
+class Simulation(object):
     """
     Handles a simulation of
     1. A car at position pos moving towards a traffic-light at speed vel.
@@ -15,9 +15,8 @@ class TrafficSim(object):
        car.
     """
 
-    def __init__(self, driver, maxTime, logging=False):
+    def __init__(self, driver, logging=False):
         self.driver = driver
-        self.maxTime = maxTime
         self.pos = START_POS
         self.vel = START_VEL
         self.time = 0
@@ -48,12 +47,9 @@ class TrafficSim(object):
         acc = self.truncate(acc)
         self.integrate(acc)
 
-        # if self.numSteps % 100 == 0:
-            # print("{:.2} {:.2} {:.2}".format(self.pos, self.vel, acc))
-
         if self.logging:
-            self.log.append(DriverState(time=self.time, pos=self.pos,
-                                        vel=self.vel, acc=acc))
+            state = DriverState(self.time, self.pos, self.vel, acc)
+            self.log.append(state)
 
     def run(self):
         """Run the simulation until the traffic light turns green"""

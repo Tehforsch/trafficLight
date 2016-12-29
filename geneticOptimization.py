@@ -3,7 +3,7 @@ import evaluation
 import constants
 import random
 import visualization
-from trafficSim import TrafficSim
+from simulation import Simulation
 
 class GeneticOptimization(object):
     """
@@ -84,7 +84,7 @@ class Strategy(object):
         self.trafficLight = trafficLight
         # Determine fitness by running the simulation
         driver = StrategyDriver(self.acceleration)
-        self.sim = TrafficSim(driver, self.trafficLight.maxTime, logging=True)
+        self.sim = Simulation(driver, self.trafficLight.maxTime, logging=True)
         self.sim.run()
         self.fitness = evaluation.totalPerformance(self.sim, self.trafficLight)
 

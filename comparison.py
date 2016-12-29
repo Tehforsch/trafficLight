@@ -10,8 +10,8 @@ trafficLight = UniformTrafficLight(MAX_TIME)
 
 drivers = [LinearController(),
            LateBrakeController(),
-           PowerLawController(0.5),
-           PowerLawController(3.0),
+           PowerLawController(0.65),
+           PowerLawController(2.0),
            CheatController()]
 sims = [Simulation(driver, logging=True) for driver in drivers]
 for sim in sims:

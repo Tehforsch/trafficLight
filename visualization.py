@@ -13,8 +13,8 @@ def showTrajectory(logs):
 
     maxTime = max(max(t) for t in times)
     deltaAcc = MAX_ACC - MIN_ACC
-    minPerformance = evaluation.minPerformance()
-    maxPerformance = evaluation.maxPerformance()
+    minPerformance = evaluation.MIN_PERFORMANCE
+    maxPerformance = evaluation.MAX_PERFORMANCE
 
     plt.subplot(4, 1, 1)
 

@@ -11,7 +11,7 @@ START_VEL = MAX_VEL
 MAX_TIME = 5
 
 # Simulation parameters
-DT = 0.01
+DT = 0.00005
 NUM_STEPS = int(MAX_TIME / DT)
 
 # Learning/performance parameters

@@ -21,6 +21,7 @@ drivers = [
     LateBrakeController(),
     PowerLawController(0.65),
     PowerLawController(2.0),
+    PowerLawController(3.0),
     CheatController()
 ]
 

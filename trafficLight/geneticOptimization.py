@@ -6,6 +6,7 @@ from trafficLight.visualization import showTrajectory
 from trafficLight.evaluation import score
 from trafficLight.simulation import Simulation
 import trafficLight.constants as constants
+import trafficLight.controller as controller
 
 
 class GeneticOptimization(object):
@@ -26,7 +27,8 @@ class GeneticOptimization(object):
     2. crossbreed
     3. fitness
     """
-    def __init__(self, individualFactory):
+    def __init__(self, params, individualFactory):
+        self.params = params
         self.individualFactory = individualFactory
         # Constants
         self.numIndividuals = 100
@@ -68,10 +70,10 @@ class GeneticOptimization(object):
         if self.numGeneration % self.printInterval == 0:
             print("Fittest individual: {}".format(max(self.generation, key=lambda individual: individual.fitness)))
         if self.numGeneration % self.plotInterval == 0:
-            showTrajectory([individual.sim.log for individual in self.generation[:self.numToPlot]])
+            showTrajectory(self.params, [individual.sim for individual in self.generation[:self.numToPlot]])
 
 
-class StrategyDriver(object):
+class StrategyDriver(controller.Controller):
     def __init__(self, acceleration):
         self.acceleration = iter(acceleration)
 
@@ -84,12 +86,13 @@ class Strategy(object):
     Contains a generic strategy for approaching a traffic-light
     which is given by a discretized function a(t)
     """
-    def __init__(self, acceleration, trafficLight):
+    def __init__(self, params, acceleration, trafficLight):
+        self.params = params
         self.acceleration = acceleration
         self.trafficLight = trafficLight
         # Determine fitness by running the simulation
         driver = StrategyDriver(self.acceleration)
-        self.sim = Simulation(driver, logging=True)
+        self.sim = Simulation(params, driver, logging=True)
         self.sim.run()
         self.fitness = score(self.sim, self.trafficLight)
 
@@ -106,24 +109,24 @@ class Strategy(object):
         changeAmount = np.random.uniform(low=-maxChange, high=maxChange, size=len(self.acceleration))
         effectiveChange = doChange * changeAmount
         newValues = self.acceleration + effectiveChange
-        truncated = np.clip(newValues, a_min=constants.MIN_ACC, a_max=constants.MAX_ACC)
-        return Strategy(truncated, self.trafficLight)
+        truncated = np.clip(newValues, a_min=self.params['min_acc'], a_max=self.params['max_acc'])
+        return Strategy(self.params, truncated, self.trafficLight)
 
     def crossbreed(self, individual):
         acceleration = 0.5 * (individual.acceleration + self.acceleration)
-        return Strategy(acceleration, self.trafficLight)
+        return Strategy(self.params, acceleration, self.trafficLight)
 
     def __str__(self):
         return str(self.fitness)
 
 
-def optimize(trafficLight):
+def optimize(params, trafficLight):
     def strategyFactory():
         acceleration = np.random.uniform(
-            low=constants.MIN_ACC,
-            high=constants.MAX_ACC,
+            low=params['min_acc'],
+            high=params['max_acc'],
             size=constants.NUM_STEPS
         )
-        return Strategy(acceleration, trafficLight)
-    opt = GeneticOptimization(strategyFactory)
+        return Strategy(params, acceleration, trafficLight)
+    opt = GeneticOptimization(params, strategyFactory)
     opt.optimize()

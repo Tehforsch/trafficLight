@@ -1,21 +1,27 @@
-from trafficLight.constants import MAX_VEL, MAX_ACC, START_POS, \
-    RUNNING_RED_LIGHT_PUNISHMENT, RUNNING_RED_LIGHT_EPSILON
+from trafficLight.constants import RUNNING_RED_LIGHT_PUNISHMENT, RUNNING_RED_LIGHT_EPSILON
 
 
 def score(sim, trafficLight):
-    return trafficLight.score(performance(sim.log))
-
-
-def performance(log):
-    return [localPerformance(state) for state in log]
-
-
-def localPerformance(state):
-    if state.pos > RUNNING_RED_LIGHT_EPSILON:
+    pos_latest = sim.log[-1].pos
+    if pos_latest > RUNNING_RED_LIGHT_EPSILON:
         return RUNNING_RED_LIGHT_PUNISHMENT
     else:
-        return state.pos - 0.5 * (MAX_VEL - state.vel)**2 / MAX_ACC
+        return trafficLight.score(performanceList(sim))
 
 
-MIN_PERFORMANCE = START_POS - 0.5 * MAX_VEL**2 / MAX_ACC
-MAX_PERFORMANCE = 0.0
+def performanceList(sim):
+    max_vel = sim.params['max_vel']
+    max_acc = sim.params['max_acc']
+    return [performance(state, max_vel, max_acc) for state in sim.log]
+
+
+def performance(state, max_vel, max_acc):
+    return state.pos - 0.5 * (max_vel - state.vel)**2 / max_acc
+
+
+def minPerformance(params):
+    return params['start_pos'] - 0.5 * params['max_vel']**2 / params['max_acc']
+
+
+def maxPerformance():
+    return 0.0

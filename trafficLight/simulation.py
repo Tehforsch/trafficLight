@@ -1,6 +1,6 @@
 from collections import namedtuple
 
-from trafficLight.constants import START_POS, START_VEL, MAX_ACC, MIN_ACC, DT, NUM_STEPS
+from trafficLight.constants import DT, NUM_STEPS
 
 DriverState = namedtuple('DriveState', ['time', 'pos', 'vel', 'acc'])
 
@@ -16,10 +16,19 @@ class Simulation(object):
        car.
     """
 
-    def __init__(self, driver, logging=False):
+    def __init__(self, params, driver, logging=False):
         self.driver = driver
-        self.pos = START_POS
-        self.vel = START_VEL
+        self.driver.params = params
+        self.driver.setup()
+
+        self.params = params
+
+        self.pos = params['start_pos']
+        self.vel = params['start_vel']
+
+        self.max_acc = params['max_acc']
+        self.min_acc = params['min_acc']
+
         self.time = 0
         self.numSteps = 0
         self.logging = logging
@@ -29,7 +38,7 @@ class Simulation(object):
 
     def truncate(self, acc):
         """Ensure that the acceleration is in the interval [MIN_ACC, MAX_ACC]."""
-        acc = max(min(acc, MAX_ACC), MIN_ACC)
+        acc = max(min(acc, self.max_acc), self.min_acc)
         return acc
 
     def integrate(self, acc):

@@ -1,9 +1,10 @@
-import numpy as np
 import random
 
-from .visualization import showTrajectory
-from .evaluation import totalPerformance
-from .simulation import Simulation
+import numpy as np
+
+from trafficLight.visualization import showTrajectory
+from trafficLight.evaluation import totalPerformance
+from trafficLight.simulation import Simulation
 import trafficLight.constants as constants
 
 
@@ -32,7 +33,7 @@ class GeneticOptimization(object):
         self.numAfterCulling = 50
         self.proportionGeneratedThroughMutation = 0.5
         self.mutationParameter = 1.0
-        self.mutationDecay = 0.001 # How much the mutation parameter decreases with every timestep
+        self.mutationDecay = 0.001  # How much the mutation parameter decreases with every timestep
         self.numIterations = 1000
         self.numGeneration = 0
         self.generation = [self.individualFactory() for n in range(self.numIndividuals)]
@@ -65,7 +66,7 @@ class GeneticOptimization(object):
 
     def outputInfo(self):
         if self.numGeneration % self.printInterval == 0:
-            print("Fittest individual: {}".format(max(self.generation, key=lambda individual:individual.fitness)))
+            print("Fittest individual: {}".format(max(self.generation, key=lambda individual: individual.fitness)))
         if self.numGeneration % self.plotInterval == 0:
             showTrajectory([individual.sim.log for individual in self.generation[:self.numToPlot]])
 
@@ -119,10 +120,10 @@ class Strategy(object):
 def optimize(trafficLight):
     def strategyFactory():
         acceleration = np.random.uniform(
-                low = constants.MIN_ACC,
-                high = constants.MAX_ACC,
-                size = constants.NUM_STEPS
-            )
+            low=constants.MIN_ACC,
+            high=constants.MAX_ACC,
+            size=constants.NUM_STEPS
+        )
         return Strategy(acceleration, trafficLight)
     opt = GeneticOptimization(strategyFactory)
     opt.optimize()

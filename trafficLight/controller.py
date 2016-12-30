@@ -1,4 +1,4 @@
-from .constants import MAX_ACC, MIN_ACC, START_VEL, START_POS, MAX_VEL
+from trafficLight.constants import MAX_ACC, MIN_ACC, START_VEL, START_POS, MAX_VEL
 
 
 class Controller(object):

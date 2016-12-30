@@ -1,6 +1,6 @@
 import numpy as np
 
-from .constants import DT
+from trafficLight.constants import DT
 
 
 class TrafficLight(object):

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
-from .constants import START_POS, MIN_ACC, MAX_ACC, MAX_VEL
-from .evaluation import performance, MIN_PERFORMANCE, MAX_PERFORMANCE
+from trafficLight.constants import START_POS, MIN_ACC, MAX_ACC, MAX_VEL
+import trafficLight.evaluation as evaluation
 
 
 def showTrajectory(logs):
@@ -9,12 +9,12 @@ def showTrajectory(logs):
     positions = [[s.pos for s in log] for log in logs]
     velocities = [[s.vel for s in log] for log in logs]
     accelerations = [[s.acc for s in log] for log in logs]
-    performances = [performance(log) for log in logs]
+    performances = [evaluation.performance(log) for log in logs]
 
     maxTime = max(max(t) for t in times)
     deltaAcc = MAX_ACC - MIN_ACC
-    minPerformance = MIN_PERFORMANCE
-    maxPerformance = MAX_PERFORMANCE
+    minPerformance = evaluation.MIN_PERFORMANCE
+    maxPerformance = evaluation.MAX_PERFORMANCE
 
     plt.subplot(4, 1, 1)
 

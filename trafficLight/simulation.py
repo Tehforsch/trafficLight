@@ -1,5 +1,6 @@
-from .constants import START_POS, START_VEL, MAX_ACC, MIN_ACC, DT, NUM_STEPS
 from collections import namedtuple
+
+from trafficLight.constants import START_POS, START_VEL, MAX_ACC, MIN_ACC, DT, NUM_STEPS
 
 DriverState = namedtuple('DriveState', ['time', 'pos', 'vel', 'acc'])
 

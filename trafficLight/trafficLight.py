@@ -8,7 +8,7 @@ class TrafficLight(object):
         self.maxTime = maxTime
 
     def score(self, performances):
-        return performances[-1]
+        raise NotImplementedError()
 
 
 class ProbabilityDistributionTrafficLight(TrafficLight):
@@ -17,6 +17,7 @@ class ProbabilityDistributionTrafficLight(TrafficLight):
     known in advance and is instead represented by a probability
     distribution of turning green as a function of time.
     """
+
     def __init__(self, distribution):
         self.distribution = distribution
         maxTime = len(self.distribution) * DT
@@ -31,6 +32,7 @@ class UniformTrafficLight(ProbabilityDistributionTrafficLight):
     Represents a traffic light with a uniform probability
     distribution with a cutoff after some time.
     """
+
     def __init__(self, maxTime):
         super().__init__(UniformDistribution(maxTime, DT))
 
@@ -60,10 +62,11 @@ class UniformDistribution(Distribution):
     """
     Represents a uniform distribution with a cutoff at some maximum value, i.e.
     p(t) =  { 1/T if t <= T
-            { 0   else
+            { 0   otherwise
     Values are discretized with stepSize resulting in a total of
     T / stepSize values.
     """
+
     def __init__(self, T, stepSize):
         numSteps = int(T / stepSize)
         probabilityPerStep = 1 / numSteps

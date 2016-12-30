@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 from trafficLight.visualization import showTrajectory
-from trafficLight.evaluation import totalPerformance
+from trafficLight.evaluation import score
 from trafficLight.simulation import Simulation
 import trafficLight.constants as constants
 
@@ -91,7 +91,7 @@ class Strategy(object):
         driver = StrategyDriver(self.acceleration)
         self.sim = Simulation(driver, logging=True)
         self.sim.run()
-        self.fitness = totalPerformance(self.sim, self.trafficLight)
+        self.fitness = score(self.sim, self.trafficLight)
 
     def mutate(self, mutationParameter):
         """Create a new strategy by changing each value with probability

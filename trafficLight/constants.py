@@ -14,6 +14,6 @@ MAX_TIME = 5
 DT = 0.00005
 NUM_STEPS = int(MAX_TIME / DT)
 
-# Learning/performance parameters
+# Evaluation parameters
 RUNNING_RED_LIGHT_EPSILON = 1e-4
 RUNNING_RED_LIGHT_PUNISHMENT = -100

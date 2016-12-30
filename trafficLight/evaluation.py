@@ -2,7 +2,7 @@ from trafficLight.constants import MAX_VEL, MAX_ACC, START_POS, \
     RUNNING_RED_LIGHT_PUNISHMENT, RUNNING_RED_LIGHT_EPSILON
 
 
-def totalPerformance(sim, trafficLight):
+def score(sim, trafficLight):
     return trafficLight.score(performance(sim.log))
 
 
